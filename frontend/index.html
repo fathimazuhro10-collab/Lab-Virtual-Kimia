@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChemLab Academy - Game Pembelajaran Kimia</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="atom-animation">
+            <div class="nucleus"></div>
+            <div class="electron electron-1"></div>
+            <div class="electron electron-2"></div>
+            <div class="electron electron-3"></div>
+        </div>
+        <h2>ChemLab Academy</h2>
+        <div class="loading-bar">
+            <div class="loading-progress"></div>
+        </div>
+        <p>Memuat laboratorium virtual...</p>
+    </div>
+
+    <!-- Main App Container -->
+    <div id="app" class="app-container" style="display: none;">
+        <!-- Navigation Header -->
+        <header class="main-header">
+            <div class="logo">
+                <img src="assets/images/logo.svg" alt="ChemLab Academy">
+                <span>ChemLab Academy</span>
+            </div>
+            <nav class="main-nav">
+                <button class="nav-btn" data-section="dashboard">Dashboard</button>
+                <button class="nav-btn" data-section="materials">Materi</button>
+                <button class="nav-btn" data-section="lab">Lab Virtual</button>
+                <button class="nav-btn" data-section="games">Games</button>
+                <button class="nav-btn" data-section="quiz">Quiz</button>
+                <button class="nav-btn teacher-only" id="teacher-nav" onclick="teacherManager.showTeacherDashboard()" style="display: none;">👨‍🏫 Dashboard Guru</button>
+            </nav>
+            <div class="user-info">
+                <div class="user-stats">
+                    <span class="xp">XP: <span id="user-xp">0</span></span>
+                    <span class="level">Level: <span id="user-level">1</span></span>
+                    <span class="coins">Koin: <span id="user-coins">100</span></span>
+                </div>
+                <div class="user-avatar">
+                    <img id="avatar-img" src="assets/images/avatars/default.svg" alt="Avatar">
+                </div>
+                <button class="logout-btn" id="logout-btn" onclick="authManager.logout()" title="Logout">
+                    🚪 Keluar
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="content-section active">
+                <div class="dashboard-grid">
+                    <div class="welcome-card">
+                        <h2>Selamat Datang di ChemLab Academy!</h2>
+                        <p>Jelajahi dunia kimia dengan eksperimen virtual dan game edukatif</p>
+                        <div class="progress-overview">
+                            <div class="progress-item">
+                                <span>Progress Belajar</span>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 35%"></div>
+                                </div>
+                                <span>35%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quick-actions">
+                        <h3>Aksi Cepat</h3>
+                        <div class="action-buttons">
+                            <button class="action-btn lab-btn" onclick="openSection('lab')">
+                                <i class="icon-lab"></i>
+                                <span>Lab Virtual</span>
+                            </button>
+                            <button class="action-btn game-btn" onclick="openSection('games')">
+                                <i class="icon-game"></i>
+                                <span>Mini Games</span>
+                            </button>
+                            <button class="action-btn quiz-btn" onclick="openSection('quiz')">
+                                <i class="icon-quiz"></i>
+                                <span>Quiz Harian</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="achievements">
+                        <h3>Badge Terbaru</h3>
+                        <div class="badge-list">
+                            <div class="badge earned">
+                                <img src="assets/images/badges/scientist-rookie.svg" alt="Scientist Rookie">
+                                <span>Scientist Rookie</span>
+                            </div>
+                            <div class="badge locked">
+                                <img src="assets/images/badges/acid-master.svg" alt="Acid Master">
+                                <span>Acid Master</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="leaderboard-preview">
+                        <h3>Leaderboard Kelas</h3>
+                        <div class="top-players">
+                            <div class="player-rank">
+                                <span class="rank">1</span>
+                                <span class="name">Ahmad Faiz</span>
+                                <span class="score">2,450 XP</span>
+                            </div>
+                            <div class="player-rank current-user">
+                                <span class="rank">5</span>
+                                <span class="name">Anda</span>
+                                <span class="score">1,200 XP</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Materials Section -->
+            <section id="materials" class="content-section">
+                <div class="materials-container">
+                    <h2>Materi Pembelajaran Kimia</h2>
+                    <div class="grade-selector">
+                        <button class="grade-btn active" data-grade="10">Kelas 10</button>
+                        <button class="grade-btn" data-grade="11">Kelas 11</button>
+                        <button class="grade-btn" data-grade="12">Kelas 12</button>
+                    </div>
+                    <div class="chapters-grid" id="chapters-container">
+                        <!-- Chapters will be loaded dynamically -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Lab Virtual Section -->
+            <section id="lab" class="content-section">
+                <div class="lab-container">
+                    <h2>Laboratorium Virtual</h2>
+                    <div class="lab-experiments">
+                        <div class="experiment-card" data-experiment="acid-base">
+                            <img src="assets/images/experiments/acid-base.svg" alt="Identifikasi Asam Basa">
+                            <h3>Identifikasi Asam Basa</h3>
+                            <p>Pelajari cara mengidentifikasi sifat asam dan basa menggunakan indikator</p>
+                            <button class="start-experiment-btn">Mulai Eksperimen</button>
+                        </div>
+                        <div class="experiment-card" data-experiment="endothermic">
+                            <img src="assets/images/experiments/endothermic.svg" alt="Reaksi Endoterm">
+                            <h3>Reaksi Endoterm & Eksoterm</h3>
+                            <p>Amati perubahan suhu dalam reaksi kimia</p>
+                            <button class="start-experiment-btn">Mulai Eksperimen</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Games Section -->
+            <section id="games" class="content-section">
+                <div class="games-container">
+                    <h2>Chemistry Games</h2>
+                    <div class="games-grid">
+                        <div class="game-card" data-game="periodic-puzzle">
+                            <img src="assets/images/games/periodic-puzzle.svg" alt="Periodic Puzzle">
+                            <h3>Periodic Puzzle</h3>
+                            <p>Susun tabel periodik dengan benar</p>
+                            <button class="play-game-btn">Main Sekarang</button>
+                        </div>
+                        <div class="game-card" data-game="chem-match">
+                            <img src="assets/images/games/chem-match.svg" alt="Chem Match">
+                            <h3>Chem Match</h3>
+                            <p>Cocokkan molekul dengan namanya</p>
+                            <button class="play-game-btn">Main Sekarang</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quiz Section -->
+            <section id="quiz" class="content-section">
+                <div class="quiz-container">
+                    <h2>Quiz & Ujian</h2>
+                    <div class="quiz-options">
+                        <div class="quiz-card">
+                            <h3>Quiz Cepat</h3>
+                            <p>5 soal acak - 5 menit</p>
+                            <button class="start-quiz-btn" data-type="quick">Mulai Quiz</button>
+                        </div>
+                        <div class="quiz-card">
+                            <h3>Challenge Harian</h3>
+                            <p>10 soal - Bonus XP 2x</p>
+                            <button class="start-quiz-btn" data-type="daily">Mulai Challenge</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal untuk Login -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <h2>Masuk ke ChemLab Academy</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" required>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="radio" name="userType" value="student" checked> Siswa
+                    </label>
+                    <label>
+                        <input type="radio" name="userType" value="teacher"> Guru
+                    </label>
+                </div>
+                <button type="submit">Masuk</button>
+                <button type="button" id="guest-login">Masuk sebagai Tamu</button>
+            </form>
+            
+            <div class="quick-access">
+                <h3>Akses Cepat</h3>
+                <div class="access-links">
+                    <a href="?login=teacher" class="access-btn teacher-access">
+                        👨‍🏫 Akses Guru
+                        <small>Lihat dashboard dan download laporan siswa</small>
+                    </a>
+                    <a href="?login=student" class="access-btn student-access">
+                        👨‍🎓 Akses Siswa
+                        <small>Bermain dan belajar kimia</small>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.70.0/phaser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/lab.js"></script>
+    <script src="js/games.js"></script>
+    <script src="js/quiz.js"></script>
+    <script src="js/teacher.js"></script>
+</body>
+</html>

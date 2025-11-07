@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Akses - ChemLab Academy</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+        .qr-section {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            margin: 1rem auto;
+            background: white;
+            border: 2px solid #3498db;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+        .url-box {
+            background: #2c3e50;
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            margin: 1rem 0;
+            word-break: break-all;
+        }
+        .copy-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            margin: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        .copy-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        .instructions {
+            text-align: left;
+            margin-top: 2rem;
+            padding: 1rem;
+            background: #e8f5e8;
+            border-radius: 10px;
+            border-left: 4px solid #27ae60;
+        }
+        .instructions h3 {
+            color: #27ae60;
+            margin-top: 0;
+        }
+        .instructions ol {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+        .instructions li {
+            margin: 0.5rem 0;
+            color: #2c3e50;
+        }
+        .device-icons {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 1.5rem 0;
+        }
+        .device-icon {
+            font-size: 3rem;
+            opacity: 0.7;
+        }
+        @media (max-width: 600px) {
+            .container {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+            h1 {
+                font-size: 1.5rem;
+            }
+            .qr-code {
+                width: 150px;
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 ChemLab Academy</h1>
+        <p>Akses Aplikasi Pembelajaran Kimia</p>
+        
+        <div class="device-icons">
+            <div class="device-icon">📱</div>
+            <div class="device-icon">💻</div>
+            <div class="device-icon">🖥️</div>
+        </div>
+
+        <div class="qr-section">
+            <h3>📱 Scan QR Code atau Copy URL</h3>
+            <div class="qr-code" id="qr-placeholder">
+                QR Code akan muncul di sini<br>
+                (Gunakan generator QR online)
+            </div>
+            
+            <div class="url-box" id="student-url">
+                http://192.168.8.157:3000?login=student
+            </div>
+            
+            <button class="copy-btn" onclick="copyURL('student')">📋 Copy URL Siswa</button>
+            <button class="copy-btn" onclick="copyURL('teacher')">👨‍🏫 Copy URL Guru</button>
+        </div>
+
+        <div class="instructions">
+            <h3>📋 Cara Akses untuk Siswa:</h3>
+            <ol>
+                <li>Pastikan handphone/laptop terhubung <strong>WiFi yang sama</strong> dengan komputer guru</li>
+                <li>Buka <strong>browser</strong> (Chrome, Safari, Firefox)</li>
+                <li><strong>Scan QR Code</strong> atau copy-paste URL di atas</li>
+                <li>Tunggu loading, otomatis masuk sebagai siswa</li>
+                <li>Mulai belajar: Quiz, Games, Lab Virtual! 🎓</li>
+            </ol>
+        </div>
+
+        <div style="margin-top: 2rem; padding: 1rem; background: #fff3cd; border-radius: 10px; border-left: 4px solid #ffc107;">
+            <h4 style="color: #856404; margin-top: 0;">⚠️ Penting:</h4>
+            <p style="color: #856404; margin: 0;">
+                Semua device harus terhubung ke <strong>WiFi yang sama</strong>. 
+                Jika IP berubah, jalankan <code>ipconfig</code> di komputer guru untuk mendapatkan IP baru.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function copyURL(type) {
+            const baseURL = 'http://192.168.8.157:3000?login=';
+            const url = baseURL + type;
+            
+            navigator.clipboard.writeText(url).then(function() {
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = '✅ Copied!';
+                btn.style.background = '#27ae60';
+                
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '#3498db';
+                }, 2000);
+            }).catch(function(err) {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = url;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                alert('URL copied: ' + url);
+            });
+        }
+
+        // Update URLs if IP changes
+        function updateIP() {
+            const newIP = prompt('Masukkan IP baru (dari ipconfig):');
+            if (newIP) {
+                const studentURL = `http://${newIP}:3000?login=student`;
+                const teacherURL = `http://${newIP}:3000?login=teacher`;
+                
+                document.getElementById('student-url').textContent = studentURL;
+                
+                // Update copy functions
+                window.copyURL = function(type) {
+                    const url = `http://${newIP}:3000?login=${type}`;
+                    navigator.clipboard.writeText(url);
+                    alert('URL copied: ' + url);
+                };
+            }
+        }
+
+        // Add update IP button
+        document.addEventListener('DOMContentLoaded', function() {
+            const updateBtn = document.createElement('button');
+            updateBtn.textContent = '🔄 Update IP';
+            updateBtn.className = 'copy-btn';
+            updateBtn.style.background = '#e74c3c';
+            updateBtn.onclick = updateIP;
+            document.querySelector('.qr-section').appendChild(updateBtn);
+        });
+    </script>
+</body>
+</html>

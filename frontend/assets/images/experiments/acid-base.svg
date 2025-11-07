@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="150" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="150" fill="#E3F2FD"/>
+  <circle cx="100" cy="75" r="30" fill="#2196F3"/>
+  <text x="100" y="80" text-anchor="middle" fill="white" font-size="12" font-family="Arial">ACID-BASE</text>
+</svg>
